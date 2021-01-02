@@ -6,24 +6,48 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class User extends AbstractBaseEntity{
+@Table(name = "user")
+public class User{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userinfo_generator")
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column
     private String name;
+
+    @Column
     private String loginName;
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
-    @Enumerated(EnumType.STRING)
+
+    @Column
     private boolean active;
+
+    @Column
     private boolean removed;
+
+    @Column
     private String email;
+
+    @Column
     private String phone;
+
+    @Column
     private String city;
+
+    @Column
     private String district;
+
+    @Column
     private String level;
+
+    @Column
     private Date registered;
+
+    @Column
     @JsonIgnore
     private String password;
 
@@ -132,19 +156,6 @@ public class User extends AbstractBaseEntity{
         this.removed = removed;
     }
 
-    public static enum UserType {
-        USER("Пользователь"), ADMIN("Администратор");
-        private final String title;
-
-        UserType(String title) {
-            this.title = title;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
-
     public boolean isRemoved() {
         return removed;
     }
@@ -163,16 +174,25 @@ public class User extends AbstractBaseEntity{
 
     public User() {}
 
-    public User(User u) {
-        this();
-    }
-
     public Date getRegistered() {
         return registered;
     }
 
     public void setRegistered(Date registered) {
         this.registered = registered;
+    }
+
+    public enum UserType {
+        USER("Пользователь"), ADMIN("Администратор");
+        private final String title;
+
+        UserType(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
     @Override
