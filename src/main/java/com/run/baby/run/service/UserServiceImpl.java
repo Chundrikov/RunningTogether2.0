@@ -11,8 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import com.run.baby.run.util.UserUtil;
+import com.run.baby.run.util.ValidationUtil;
 
 import java.util.List;
+
+import static com.run.baby.run.util.UserUtil.prepareToSave;
 
 public class UserServiceImpl implements UserService{
 
@@ -63,13 +66,6 @@ public class UserServiceImpl implements UserService{
         prepareAndSave(UserUtil.updateFromTo(user, userTo));   // !! need only for JDBC implementation
     }
 
-    @CacheEvict(value = "user", allEntries = true)
-    @Transactional
-    public void enable(int id, boolean enabled) {
-        User user = get(id);
-        user.setEnabled(enabled);
-        repository.save(user);  // !! need only for JDBC implementation
-    }
 
     @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {

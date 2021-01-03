@@ -3,6 +3,8 @@ package com.run.baby.run.util;
 import com.run.baby.run.model.Role;
 import com.run.baby.run.model.User;
 import com.run.baby.run.to.UserTo;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 public class UserUtil {
     public static User createNewFromTo(UserTo userTo) {
@@ -10,13 +12,12 @@ public class UserUtil {
     }
 
     public static UserTo asTo(User user) {
-        return new UserTo(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getCaloriesPerDay());
+        return new UserTo(user.getId(), user.getName(), user.getEmail(), user.getPassword());
     }
 
     public static User updateFromTo(User user, UserTo userTo) {
         user.setName(userTo.getName());
         user.setEmail(userTo.getEmail().toLowerCase());
-        user.setCaloriesPerDay(userTo.getCaloriesPerDay());
         user.setPassword(userTo.getPassword());
         return user;
     }

@@ -100,6 +100,8 @@ public class User extends AbstractNamedEntity{
         setRoles(roles);
     }
 
+
+
     @Id
     public Integer getId() {
         return id;
