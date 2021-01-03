@@ -1,11 +1,11 @@
 package com.run.baby.run.util;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import com.run.baby.run.HasId;
+import com.run.baby.run.util.exception.IllegalRequestDataException;
+import com.run.baby.run.util.exception.NotFoundException;
 
 import javax.validation.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ValidationUtil {
 

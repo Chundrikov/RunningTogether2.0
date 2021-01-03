@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.run.baby.run.util.ValidationUtil;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 

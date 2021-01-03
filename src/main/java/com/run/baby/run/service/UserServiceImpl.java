@@ -11,11 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import com.run.baby.run.util.UserUtil;
-import com.run.baby.run.util.ValidationUtil;
 
 import java.util.List;
 
 import static com.run.baby.run.util.UserUtil.prepareToSave;
+import static com.run.baby.run.util.ValidationUtil.checkNotFound;
+import static com.run.baby.run.util.ValidationUtil.checkNotFoundWithId;
 
 public class UserServiceImpl implements UserService{
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public interface UserService extends UserDetailsService {
-    public void create(User user);
+    public User create(User user);
 
     public void delete (int id);
 
