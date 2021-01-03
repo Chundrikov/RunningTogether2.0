@@ -1,6 +1,7 @@
 package com.run.baby.run.repository;
 
 import com.run.baby.run.model.User;
+import com.run.baby.run.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -10,11 +11,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import util.ValidationUtil;
+import com.run.baby.run.util.ValidationUtil;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)

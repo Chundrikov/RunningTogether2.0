@@ -1,13 +1,34 @@
 package com.run.baby.run.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.*;
+
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@NamedQueries({
+        @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
+        @NamedQuery(name = User.BY_EMAIL, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
+        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u ORDER BY u.name, u.email"),
+})
+
 
 @Entity
-@Table(name = "user")
-public class User{
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+public class User extends AbstractNamedEntity{
+
+    public static final String DELETE = "User.delete";
+    public static final String BY_EMAIL = "User.getByEmail";
+    public static final String ALL_SORTED = "User.getAllSorted";
 
     @Id
     @Column
@@ -20,16 +41,16 @@ public class User{
     @Column
     private String loginName;
 
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
-
     @Column
     private boolean active;
 
     @Column
     private boolean removed;
 
-    @Column
+    @Column(name = "email", nullable = false, unique = true)
+    @Email
+    @NotBlank
+    @Size(max = 100)
     private String email;
 
     @Column
@@ -44,18 +65,29 @@ public class User{
     @Column
     private String level;
 
-    @Column
-    private Date registered;
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "role"}, name = "user_roles_unique_idx")})
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @BatchSize(size = 200)
+    private Set<Role> roles;
 
-    @Column
-    @JsonIgnore
+    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Date registered = new Date();
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    public User(Integer id, String name, String loginName, UserType userType, boolean active, boolean removed, String email, String phone, String city, String district, String level, Date registered, String password) {
-        this.id = id;
-        this.name = name;
+    public User(Integer id, String name, String loginName, boolean active, boolean removed, String email, String phone, String city, String district, String level, Date registered, String password, Collection<Role> roles) {
+        super(id, name);
         this.loginName = loginName;
-        this.userType = userType;
         this.active = active;
         this.removed = removed;
         this.email = email;
@@ -65,6 +97,7 @@ public class User{
         this.level = level;
         this.registered = registered;
         this.password = password;
+        setRoles(roles);
     }
 
     @Id
@@ -74,6 +107,14 @@ public class User{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public String getName() {
@@ -132,14 +173,6 @@ public class User{
         this.loginName = loginName;
     }
 
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -182,25 +215,11 @@ public class User{
         this.registered = registered;
     }
 
-    public enum UserType {
-        USER("Пользователь"), ADMIN("Администратор");
-        private final String title;
-
-        UserType(String title) {
-            this.title = title;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
-
     @Override
     public String toString() {
         return "UserInfo{" +
                 "loginName='" + loginName + '\'' +
                 ", name='" + name + '\'' +
-                ", userType=" + userType +
                 ", active=" + active +
                 ", removed=" + removed +
                 ", name=" + name +
