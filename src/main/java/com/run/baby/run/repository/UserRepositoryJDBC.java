@@ -28,7 +28,6 @@ public class UserRepositoryJDBC implements UserRepository{
 
     private final SimpleJdbcInsert insertUser;
 
-    Autowired
     public UserRepositoryJDBC (JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("user")
@@ -94,7 +93,7 @@ public class UserRepositoryJDBC implements UserRepository{
     }
 
     private void insertRoles(User u) {
-        Set<Role> roles = u.getRoles();
+        Set<Role> roles = u.getRole();
         if (!CollectionUtils.isEmpty(roles)) {
             jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", roles, roles.size(),
                     (ps, role) -> {

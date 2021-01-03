@@ -9,6 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.run.baby.run</groupId>
+    <packaging>war</packaging>
     <artifactId>run</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>run</name>
@@ -112,10 +113,6 @@
                         <version>${spring-restdocs.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

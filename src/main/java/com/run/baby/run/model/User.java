@@ -67,12 +67,9 @@ public class User extends AbstractNamedEntity{
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "role"}, name = "user_roles_unique_idx")})
-    @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
-    private Set<Role> roles;
+    private Set<Role> role;
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
@@ -85,8 +82,9 @@ public class User extends AbstractNamedEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    public User(Integer id, String name, String loginName, boolean active, boolean removed, String email, String phone, String city, String district, String level, Date registered, String password, Collection<Role> roles) {
-        super(id, name);
+    public User(Integer id, String name, String loginName, boolean active, boolean removed, String email, String phone, String city, String district, String level, Date registered, String password) {
+        this.id=id;
+        this.name=name;
         this.loginName = loginName;
         this.active = active;
         this.removed = removed;
@@ -97,21 +95,10 @@ public class User extends AbstractNamedEntity{
         this.level = level;
         this.registered = registered;
         this.password = password;
-        setRoles(roles);
     }
 
-    public User(Integer id, String name, String email, String password, int caloriesPerDay, Role role, Role... roles) {
-        this(id, name, email, password, caloriesPerDay, true, new Date(), EnumSet.of(role, roles));
+    public User(Object o, String name, String toLowerCase, String password, Role user) {
     }
-
-    public User(Integer id, String name, String email, String password, Role role) {
-        this(id, name, email, password, role);
-    }
-
-    public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRoles());
-    }
-
 
     @Id
     public Integer getId() {
@@ -123,11 +110,11 @@ public class User extends AbstractNamedEntity{
     }
 
     public void setRoles(Collection<Role> roles) {
-        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+        this.role = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Role> getRole() {
+        return role;
     }
 
     public String getName() {
@@ -217,8 +204,6 @@ public class User extends AbstractNamedEntity{
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public User() {}
 
     public Date getRegistered() {
         return registered;

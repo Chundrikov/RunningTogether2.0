@@ -18,12 +18,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        String password = req.getParameter("pass");
-        User user = new User();
-
-        req.setAttribute("userName", name);
-        doGet(req, resp);
     }
 }
 
