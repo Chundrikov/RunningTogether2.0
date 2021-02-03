@@ -7,7 +7,7 @@
     <!-- list servlet -->
     <servlet>
         <servlet-name>list</servlet-name>
-        <servlet-class>app.servlets.ListServlet</servlet-class>
+        <servlet-class>com.run.baby.run.servlets.ListServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -18,7 +18,7 @@
     <!-- registration servlet -->
     <servlet>
         <servlet-name>add</servlet-name>
-        <servlet-class>app.servlets.RegistrationServlet</servlet-class>
+        <servlet-class>com.run.baby.run.servlets.RegistrationServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -29,7 +29,7 @@
     <!-- search servlet -->
     <servlet>
         <servlet-name>search</servlet-name>
-        <servlet-class>app.servlets.SearchServlet</servlet-class>
+        <servlet-class>com.run.baby.run.servlets.SearchServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
